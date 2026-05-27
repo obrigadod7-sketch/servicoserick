@@ -221,14 +221,6 @@ export default function FeedPage() {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL || import.meta.env.VITE_BACKEND_URL || ""}/api/posts`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setPosts(Array.isArray(data) && data.length ? data : PREVIEW_POSTS);
-  const fetchPosts = async () => {
-    try {
       const { data: session } = await supabase.auth.getSession();
       const authed = !!session?.session;
 
