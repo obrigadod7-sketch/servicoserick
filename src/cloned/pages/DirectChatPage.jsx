@@ -967,16 +967,46 @@ export default function DirectChatPage() {
       {activeModal === 'more' && (
         <ModalShell title="Mais opções" onClose={() => setActiveModal(null)}>
           <div className="space-y-1">
-            <MoreOption icon={<StarIcon size={18} className="text-amber-500" />} label="Avaliar este profissional" onClick={() => { toast.info('Avaliação em breve'); setActiveModal(null); }} />
-            <MoreOption icon={<Share2 size={18} className="text-blue-500" />} label="Compartilhar conversa" onClick={() => { toast.info('Compartilhamento copiado'); setActiveModal(null); }} />
-            <MoreOption icon={<Pin size={18} className="text-purple-500" />} label="Fixar conversa" onClick={() => { toast.success('Conversa fixada'); setActiveModal(null); }} />
-            <MoreOption icon={<Archive size={18} className="text-gray-500" />} label="Arquivar conversa" onClick={() => { toast.success('Conversa arquivada'); setActiveModal(null); }} />
+            <MoreOption icon={<StarIcon size={18} className="text-amber-500" />} label="Avaliar este profissional" onClick={openRating} />
+            <MoreOption icon={<Share2 size={18} className="text-blue-500" />} label="Compartilhar conversa" onClick={handleShareConversation} />
+            <MoreOption icon={<Pin size={18} className="text-purple-500" />} label={isPinned ? 'Desafixar conversa' : 'Fixar conversa'} onClick={togglePin} />
+            <MoreOption icon={<Archive size={18} className="text-gray-500" />} label={isArchived ? 'Desarquivar conversa' : 'Arquivar conversa'} onClick={toggleArchive} />
             <div className="my-2 border-t border-gray-100" />
-            <MoreOption icon={<Flag size={18} className="text-red-500" />} label="Reportar usuário" danger onClick={() => { toast.warning('Usuário reportado'); setActiveModal(null); }} />
-            <MoreOption icon={<Ban size={18} className="text-red-500" />} label="Bloquear usuário" danger onClick={() => { toast.warning('Usuário bloqueado'); setActiveModal(null); }} />
+            <MoreOption icon={<Flag size={18} className="text-red-500" />} label="Reportar usuário" danger onClick={handleReport} />
+            <MoreOption icon={<Ban size={18} className="text-red-500" />} label={isBlocked ? 'Desbloquear usuário' : 'Bloquear usuário'} danger onClick={toggleBlock} />
           </div>
         </ModalShell>
       )}
+
+      {activeModal === 'rate' && (
+        <ModalShell title="Avaliar profissional" onClose={() => setActiveModal(null)}>
+          <div className="flex justify-center gap-1 mb-4">
+            {[1,2,3,4,5].map(n => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setRatingValue(n)}
+                className="p-1"
+                aria-label={`${n} estrelas`}
+              >
+                <StarIcon size={32} className={n <= ratingValue ? 'text-amber-500 fill-amber-500' : 'text-gray-300'} />
+              </button>
+            ))}
+          </div>
+          <Textarea
+            value={ratingNote}
+            onChange={(e) => setRatingNote(e.target.value.slice(0, 240))}
+            placeholder="Conte como foi sua experiência (opcional)"
+            rows={3}
+            className="resize-none border-gray-300 rounded-xl text-sm"
+          />
+          <div className="flex gap-2 mt-5">
+            <button onClick={() => setActiveModal(null)} className="flex-1 h-11 rounded-full border border-gray-300 font-medium hover:bg-gray-50">Cancelar</button>
+            <button onClick={submitRating} disabled={!ratingValue} className="flex-1 h-11 rounded-full bg-amber-500 text-white font-semibold hover:bg-amber-600 disabled:opacity-60">Enviar avaliação</button>
+          </div>
+        </ModalShell>
+      )}
+
 
       {/* ===== MOBILE BOTTOM NAV (only mobile) ===== */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-2 py-2 flex items-end justify-around" data-testid="mobile-bottom-nav">
