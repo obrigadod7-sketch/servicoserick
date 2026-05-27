@@ -294,8 +294,10 @@ export default function SubscriptionPage() {
             >
               Modificar meu perímetro
             </Button>
+            </>)}
           </div>
         </main>
+
 
         {/* RIGHT: UPGRADE CARD */}
         <aside className="col-span-12 md:col-span-3">
