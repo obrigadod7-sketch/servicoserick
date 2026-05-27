@@ -210,7 +210,30 @@ export default function FeedPage() {
 
   // Form fields
   const [postDescription, setPostDescription] = useState('');
-  const [postAddress, setPostAddress] = useState('Paris, France');
+  const [postAddress, setPostAddress] = useState('');
+  const [detectingAddress, setDetectingAddress] = useState(false);
+
+  const detectAddress = React.useCallback(() => {
+    if (!navigator.geolocation) return;
+    setDetectingAddress(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const d = await r.json();
+          setPostAddress(d.display_name || `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+        } catch {
+          setPostAddress(`${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+        }
+        setDetectingAddress(false);
+      },
+      () => setDetectingAddress(false),
+      { enableHighAccuracy: true, timeout: 15000 }
+    );
+  }, []);
+
+  useEffect(() => { detectAddress(); }, [detectAddress]);
   const [postBudget, setPostBudget] = useState('Sob orçamento');
   const [postCategory, setPostCategory] = useState('social');
   const [selectedPhotos, setSelectedPhotos] = useState([]); // [{id, dataUrl}]
@@ -660,12 +683,18 @@ export default function FeedPage() {
 
               <div className="mb-3">
                 <label className="text-xs font-semibold mb-1 block">Endereço</label>
-                <Input
-                  value={postAddress}
-                  onChange={(e) => setPostAddress(e.target.value)}
-                  className="h-8 text-xs bg-white border-gray-300"
-                  data-testid="feed-post-address"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    value={postAddress}
+                    onChange={(e) => setPostAddress(e.target.value)}
+                    placeholder={detectingAddress ? 'Detectando...' : 'Endereço completo'}
+                    className="h-8 text-xs bg-white border-gray-300 flex-1"
+                    data-testid="feed-post-address"
+                  />
+                  <button type="button" onClick={detectAddress} disabled={detectingAddress} className="text-xs text-orange-500 font-semibold hover:underline disabled:opacity-50 whitespace-nowrap">
+                    {detectingAddress ? '...' : '📍 Detectar'}
+                  </button>
+                </div>
               </div>
 
               <Button
@@ -875,13 +904,18 @@ export default function FeedPage() {
 
             <div className="mb-4">
               <label className="block text-sm font-semibold text-gray-900 mb-2">Endereço</label>
-              <Input
-                value={postAddress}
-                onChange={(e) => setPostAddress(e.target.value)}
-                className="h-10 text-sm rounded-xl border-gray-300"
-                placeholder="Endereço completo"
-                data-testid="modal-address"
-              />
+              <div className="flex gap-2">
+                <Input
+                  value={postAddress}
+                  onChange={(e) => setPostAddress(e.target.value)}
+                  className="h-10 text-sm rounded-xl border-gray-300 flex-1"
+                  placeholder={detectingAddress ? 'Detectando localização...' : 'Endereço completo'}
+                  data-testid="modal-address"
+                />
+                <button type="button" onClick={detectAddress} disabled={detectingAddress} className="px-3 text-sm text-orange-500 font-semibold hover:underline disabled:opacity-50 whitespace-nowrap">
+                  {detectingAddress ? '...' : '📍 Detectar'}
+                </button>
+              </div>
             </div>
 
             <div className="mb-4">
