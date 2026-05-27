@@ -180,8 +180,23 @@ export default function MessagesPage() {
         </div>
       </header>
 
+      {/* Premium banner */}
+      <div className="bg-orange-50 border-b border-orange-100">
+        <div className="max-w-[1400px] mx-auto px-4 py-2 flex items-center justify-center gap-3 flex-wrap">
+          <span className="text-sm text-gray-800">Acesse novamente ferramentas e serviços exclusivos:</span>
+          <button
+            onClick={() => navigate('/subscription')}
+            className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-1.5 rounded-md"
+            data-testid="premium-cta"
+          >
+            Assine Premier
+          </button>
+        </div>
+      </div>
+
       {/* Main 2-column messages layout */}
-      <div className="flex h-[calc(100dvh-49px)] max-w-[1400px] mx-auto">
+      <div className="flex h-[calc(100dvh-89px)] max-w-[1400px] mx-auto">
+
         {/* Left: Conversation list */}
         <aside
           className={`${activeUserId ? 'hidden lg:flex' : 'flex'} flex-col w-full lg:w-[360px] border-r border-gray-200 bg-white`}
