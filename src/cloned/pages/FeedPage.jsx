@@ -210,7 +210,30 @@ export default function FeedPage() {
 
   // Form fields
   const [postDescription, setPostDescription] = useState('');
-  const [postAddress, setPostAddress] = useState('Paris, France');
+  const [postAddress, setPostAddress] = useState('');
+  const [detectingAddress, setDetectingAddress] = useState(false);
+
+  const detectAddress = React.useCallback(() => {
+    if (!navigator.geolocation) return;
+    setDetectingAddress(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const d = await r.json();
+          setPostAddress(d.display_name || `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+        } catch {
+          setPostAddress(`${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+        }
+        setDetectingAddress(false);
+      },
+      () => setDetectingAddress(false),
+      { enableHighAccuracy: true, timeout: 15000 }
+    );
+  }, []);
+
+  useEffect(() => { detectAddress(); }, [detectAddress]);
   const [postBudget, setPostBudget] = useState('Sob orçamento');
   const [postCategory, setPostCategory] = useState('social');
   const [selectedPhotos, setSelectedPhotos] = useState([]); // [{id, dataUrl}]
