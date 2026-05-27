@@ -55,22 +55,25 @@ export default function LandingPage() {
             </div>
             <Button
               variant="outline"
-              onClick={() => navigate('/auth')}
+              onClick={() => openAuth('login')}
               className="border-gray-300 rounded-full"
               data-testid="landing-login-btn"
             >
               {t('login') || 'Entrar'}
             </Button>
             <Button
-              onClick={() => navigate('/auth')}
+              onClick={() => openAuth('signup')}
               className="bg-gray-900 hover:bg-gray-800 text-white rounded-full"
               data-testid="landing-register-btn"
             >
-              {t('register') || 'Cadastrar-se'}
+              {t('register') || 'Criar conta'}
             </Button>
           </div>
         </div>
       </header>
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} mode={authMode} onModeChange={setAuthMode} />
+
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 py-12">
