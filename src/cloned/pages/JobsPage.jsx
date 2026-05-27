@@ -780,10 +780,10 @@ export default function JobsPage() {
             <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 mt-6">
               <h3 className="font-bold text-yellow-800 mb-2">💡 Dicas para Encontrar Emprego</h3>
               <ul className="text-sm text-yellow-700 space-y-1">
-                <li>• Use palavras-chave específicas (ex: &quot;aide cuisine&quot; em vez de apenas &quot;cuisine&quot;)</li>
+                <li>• Use palavras-chave específicas (ex: &quot;auxiliar de cozinha&quot; em vez de apenas &quot;cozinha&quot;)</li>
                 <li>• Cadastre-se nas plataformas para receber alertas de vagas</li>
-                <li>• O <strong>Pôle Emploi</strong> é a agência oficial de emprego na França</li>
-                <li>• Mantenha seu CV atualizado em francês</li>
+                <li>• O <strong>SINE</strong> é o sistema oficial de emprego do Brasil</li>
+                <li>• Mantenha seu currículo atualizado e completo</li>
               </ul>
             </div>
 
@@ -791,52 +791,52 @@ export default function JobsPage() {
             <div className="bg-white rounded-2xl p-4 shadow-md">
               <h3 className="font-bold text-gray-800 mb-3">🔗 Links Úteis</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <a 
-                  href="https://www.service-public.fr/particuliers/vosdroits/N19806" 
-                  target="_blank" 
+                <a
+                  href="https://www.gov.br/trabalho-e-emprego/pt-br"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
                   <span className="text-lg">📋</span>
                   <div>
                     <p className="font-medium text-sm text-gray-800">Direitos do Trabalhador</p>
-                    <p className="text-xs text-gray-500">service-public.fr</p>
+                    <p className="text-xs text-gray-500">gov.br/trabalho</p>
                   </div>
                 </a>
-                <a 
-                  href="https://www.francetravail.fr/" 
-                  target="_blank" 
+                <a
+                  href="https://servicos.mte.gov.br/sine"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  <span className="text-lg">🇫🇷</span>
+                  <span className="text-lg">🇧🇷</span>
                   <div>
-                    <p className="font-medium text-sm text-gray-800">France Travail</p>
-                    <p className="text-xs text-gray-500">Cadastro oficial</p>
+                    <p className="font-medium text-sm text-gray-800">SINE</p>
+                    <p className="text-xs text-gray-500">Sistema Nacional de Emprego</p>
                   </div>
                 </a>
-                <a 
-                  href="https://www.cidj.com/emploi-jobs" 
-                  target="_blank" 
+                <a
+                  href="https://www.gov.br/inss/pt-br"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
                   <span className="text-lg">👥</span>
                   <div>
-                    <p className="font-medium text-sm text-gray-800">CIDJ - Empregos Jovens</p>
-                    <p className="text-xs text-gray-500">Para jovens trabalhadores</p>
+                    <p className="font-medium text-sm text-gray-800">INSS</p>
+                    <p className="text-xs text-gray-500">Previdência Social</p>
                   </div>
                 </a>
-                <a 
-                  href="https://www.refugies.info/demarche/trouver-un-emploi" 
-                  target="_blank" 
+                <a
+                  href="https://www.jovemaprendiz.com.br/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  <span className="text-lg">🤝</span>
+                  <span className="text-lg">🎓</span>
                   <div>
-                    <p className="font-medium text-sm text-gray-800">Refugiés.info</p>
-                    <p className="text-xs text-gray-500">Ajuda para refugiados</p>
+                    <p className="font-medium text-sm text-gray-800">Jovem Aprendiz</p>
+                    <p className="text-xs text-gray-500">Primeiro emprego</p>
                   </div>
                 </a>
               </div>
