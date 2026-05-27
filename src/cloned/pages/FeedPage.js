@@ -353,11 +353,11 @@ export default function FeedPage() {
             {/* Mobile: Jataí Região logo (left) */}
             <div className="flex items-center gap-2 lg:hidden">
               <div className="w-9 h-9 rounded-xl grid place-items-center text-white font-extrabold text-lg" style={{ background: 'linear-gradient(135deg,#22c55e 0%,#f97316 100%)' }}>
-                J
+                W
               </div>
               <span className="text-base font-extrabold leading-tight">
-                <span className="text-green-500">Jataí</span>{' '}
-                <span className="text-orange-500">Região</span>
+                <span className="text-green-500">Wati</span>
+                <span className="text-orange-500">zat</span>
               </span>
             </div>
 
