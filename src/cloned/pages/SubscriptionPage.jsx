@@ -22,15 +22,15 @@ const SIDEBAR = [
   {
     section: 'Meu perímetro de intervenção',
     items: [
-      { label: 'Ver as demandas', icon: ClipboardList, key: 'demandas' },
-      { label: 'Gerenciar meu perímetro', icon: MapPin, key: 'perimetro', active: true },
+      { label: 'Ver as demandas', icon: ClipboardList, key: 'demandas', route: '/home' },
+      { label: 'Gerenciar meu perímetro', icon: MapPin, key: 'perimetro' },
     ],
   },
   {
     section: 'Minha visibilidade',
     items: [
-      { label: 'Ver minha página de perfil', icon: Eye, key: 'view-profile' },
-      { label: 'Modificar minha página de perfil', icon: Edit2, key: 'edit-profile' },
+      { label: 'Ver minha página de perfil', icon: Eye, key: 'view-profile', route: '/profile' },
+      { label: 'Modificar minha página de perfil', icon: Edit2, key: 'edit-profile', route: '/profile?edit=1' },
       { label: 'Gerenciar meus comentários', icon: Star, key: 'reviews' },
       { label: 'Meu referenciamento Google', icon: Globe, key: 'seo' },
       { label: 'Meus suportes de comunicação', icon: MessageSquare, key: 'support' },
@@ -50,6 +50,13 @@ const SIDEBAR = [
     ],
   },
 ];
+
+const ITEM_LABEL = Object.fromEntries(
+  SIDEBAR.flatMap((s) => s.items.map((i) => [i.key, i.label]))
+);
+const PRO_KEYS = new Set(
+  SIDEBAR.filter((s) => s.pro).flatMap((s) => s.items.map((i) => i.key))
+);
 
 export default function SubscriptionPage() {
   const { user, token } = useContext(AuthContext);
