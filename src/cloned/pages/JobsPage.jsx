@@ -248,28 +248,29 @@ export default function JobsPage() {
     return `${diffDays} dias atrás`;
   };
 
-  // Gerar URL de busca para cada plataforma
+  // Gerar URL de busca para cada plataforma (Brasil)
   const generateSearchUrl = (platform, query, location) => {
-    const searchTerm = query || (selectedCategory !== 'all' ? SEARCH_SUGGESTIONS[selectedCategory]?.[0] : 'emploi');
-    const loc = location || 'Paris';
-    
+    const searchTerm = query || (selectedCategory !== 'all' ? SEARCH_SUGGESTIONS[selectedCategory]?.[0] : 'emprego');
+    const loc = location || 'São Paulo';
+    const slug = (s) => encodeURIComponent(String(s).toLowerCase().trim().replace(/\s+/g, '-'));
+
     switch(platform.id) {
       case 'indeed':
         return `${platform.baseUrl}?q=${encodeURIComponent(searchTerm)}&l=${encodeURIComponent(loc)}`;
-      case 'pole_emploi':
-        return `${platform.baseUrl}?motsCles=${encodeURIComponent(searchTerm)}&offresPartenaires=true`;
       case 'linkedin':
-        return `${platform.baseUrl}?keywords=${encodeURIComponent(searchTerm)}&location=${encodeURIComponent(loc)}&f_TPR=r86400`;
-      case 'leboncoin':
-        return `https://www.leboncoin.fr/offres_d_emploi/offres?text=${encodeURIComponent(searchTerm)}`;
-      case 'monster':
-        return `${platform.baseUrl}?q=${encodeURIComponent(searchTerm)}&where=${encodeURIComponent(loc)}`;
-      case 'hellowork':
-        return `${platform.baseUrl}?k=${encodeURIComponent(searchTerm)}&l=${encodeURIComponent(loc)}`;
-      case 'apec':
-        return `${platform.baseUrl}?motsCles=${encodeURIComponent(searchTerm)}`;
-      case 'welcometothejungle':
-        return `${platform.baseUrl}?query=${encodeURIComponent(searchTerm)}&aroundQuery=${encodeURIComponent(loc)}`;
+        return `${platform.baseUrl}?keywords=${encodeURIComponent(searchTerm)}&location=${encodeURIComponent(loc + ', Brasil')}&f_TPR=r86400`;
+      case 'catho':
+        return `https://www.catho.com.br/vagas/${slug(searchTerm)}/${slug(loc)}/`;
+      case 'vagas':
+        return `https://www.vagas.com.br/vagas-de-${slug(searchTerm)}?l[]=${encodeURIComponent(loc)}`;
+      case 'infojobs':
+        return `${platform.baseUrl}?palabra=${encodeURIComponent(searchTerm)}&provincia=${encodeURIComponent(loc)}`;
+      case 'gupy':
+        return `${platform.baseUrl}?jobName=${encodeURIComponent(searchTerm)}&city=${encodeURIComponent(loc)}`;
+      case 'glassdoor':
+        return `https://www.glassdoor.com.br/Vaga/${slug(loc)}-${slug(searchTerm)}-vagas-SRCH_IL.0,${loc.length}_IC2487341_KO${loc.length + 1},${loc.length + 1 + searchTerm.length}.htm`;
+      case 'sine':
+        return `https://www.google.com/search?q=${encodeURIComponent(`SINE vagas ${searchTerm} ${loc}`)}`;
       default:
         return platform.baseUrl;
     }
