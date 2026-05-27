@@ -117,13 +117,6 @@ export function ClonedAuthProvider({ children }) {
 }
 
 export function clonedRoutes(user) {
-  const previewUser = user || {
-    id: 'preview-user',
-    name: 'Usuário Preview',
-    role: 'admin',
-    email: 'preview@watizat.local',
-  };
-
   return [
     <Route key="cloned-root" path="/" element={!user ? <LandingPage /> : <Navigate to="/home" />} />,
     <Route key="cloned-servicos" path="/servicos" element={!user ? <LandingPage /> : <Navigate to="/home" />} />,
@@ -139,8 +132,8 @@ export function clonedRoutes(user) {
     <Route key="cloned-ofertantes" path="/servicos/ofertantes" element={<VolunteersPage />} />,
     <Route key="cloned-profile" path="/profile" element={<ProfilePage />} />,
     <Route key="cloned-servicos-profile" path="/servicos/perfil" element={<ProfilePage />} />,
-    <Route key="cloned-admin" path="/admin" element={previewUser.role === 'admin' ? <AdminDashboard /> : <Navigate to="/home" />} />,
-    <Route key="cloned-servicos-admin" path="/servicos/admin" element={previewUser.role === 'admin' ? <AdminDashboard /> : <Navigate to="/home" />} />,
+    <Route key="cloned-admin" path="/admin" element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/home" />} />,
+    <Route key="cloned-servicos-admin" path="/servicos/admin" element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/home" />} />,
     <Route key="cloned-direct-chat" path="/direct-chat/:userId" element={<DirectChatPage />} />,
     <Route key="cloned-volunteers" path="/volunteers" element={<VolunteersPage />} />,
     <Route key="cloned-jobs" path="/jobs" element={<JobsPage />} />,
