@@ -4,11 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Search, Wrench, MapPin, Star } from 'lucide-react';
 import i18n from '../i18n';
+import AuthModal from '../components/AuthModal';
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [language, setLanguage] = useState((i18n.language || 'pt').toUpperCase().slice(0, 2));
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login');
+  const openAuth = (mode) => { setAuthMode(mode); setAuthOpen(true); };
 
   const changeLanguage = (lang) => {
     const code = lang.toLowerCase();
@@ -51,22 +55,25 @@ export default function LandingPage() {
             </div>
             <Button
               variant="outline"
-              onClick={() => navigate('/auth')}
+              onClick={() => openAuth('login')}
               className="border-gray-300 rounded-full"
               data-testid="landing-login-btn"
             >
               {t('login') || 'Entrar'}
             </Button>
             <Button
-              onClick={() => navigate('/auth')}
+              onClick={() => openAuth('signup')}
               className="bg-gray-900 hover:bg-gray-800 text-white rounded-full"
               data-testid="landing-register-btn"
             >
-              {t('register') || 'Cadastrar-se'}
+              {t('register') || 'Criar conta'}
             </Button>
           </div>
         </div>
       </header>
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} mode={authMode} onModeChange={setAuthMode} />
+
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -95,7 +102,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Button
-                onClick={() => navigate('/auth?role=migrant')}
+                onClick={() => openAuth('signup')}
                 className="bg-gray-900 hover:bg-gray-800 text-white h-14 px-8 text-base rounded-full"
                 data-testid="cta-need-help"
               >
@@ -103,7 +110,7 @@ export default function LandingPage() {
                 Preciso de Ajuda
               </Button>
               <Button
-                onClick={() => navigate('/auth?role=helper')}
+                onClick={() => openAuth('signup')}
                 variant="outline"
                 className="border-2 border-green-500 text-green-600 hover:bg-green-50 h-14 px-8 text-base rounded-full"
                 data-testid="cta-want-help"

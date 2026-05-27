@@ -1,0 +1,318 @@
+import React, { useContext, useRef, useState } from 'react';
+import { X, ArrowLeft, Search, Wrench, Camera, Plus, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { AuthContext } from '../ClonedAuthContext';
+
+/**
+ * AuthModal — modal de login/cadastro inspirado nas referências
+ * (servivizinhos). Usa Supabase Auth e atualiza o AuthContext local.
+ *
+ * props:
+ *   open: boolean
+ *   onClose: () => void
+ *   mode: 'login' | 'signup'  (estado inicial)
+ *   onModeChange?: (mode) => void
+ */
+export default function AuthModal({ open, onClose, mode = 'login', onModeChange }) {
+  const { login } = useContext(AuthContext);
+
+  // login fields
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // signup fields
+  const [role, setRole] = useState('migrant'); // migrant = Procuro / helper = Ofereço
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const fileRef = useRef(null);
+
+  const [loading, setLoading] = useState(false);
+
+  if (!open) return null;
+
+  const setMode = (m) => onModeChange?.(m);
+
+  const resetSignup = () => {
+    setName('');
+    setLocation('');
+    setAvatarFile(null);
+    setAvatarPreview(null);
+  };
+
+  const handleAvatarPick = (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setAvatarFile(f);
+    setAvatarPreview(URL.createObjectURL(f));
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      login(data.session?.access_token, {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.user_metadata?.display_name || data.user.email?.split('@')[0],
+      });
+      toast.success('Bem-vindo de volta!');
+      onClose?.();
+    } catch (err) {
+      toast.error(err.message || 'Erro ao entrar');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (password.length < 6) {
+      toast.error('Senha deve ter no mínimo 6 caracteres');
+      return;
+    }
+    setLoading(true);
+    try {
+      const redirectUrl = `${window.location.origin}/home`;
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: { display_name: name, role, location },
+        },
+      });
+      if (error) throw error;
+
+      // upload avatar (opcional)
+      if (avatarFile && data.user) {
+        const path = `${data.user.id}/${Date.now()}-${avatarFile.name}`;
+        const { error: upErr } = await supabase.storage
+          .from('svc-photos')
+          .upload(path, avatarFile, { upsert: true });
+        if (!upErr) {
+          const { data: pub } = supabase.storage.from('svc-photos').getPublicUrl(path);
+          await supabase
+            .from('svc_profiles')
+            .update({ avatar_url: pub.publicUrl })
+            .eq('user_id', data.user.id);
+        }
+      }
+
+      if (data.session) {
+        login(data.session.access_token, {
+          id: data.user.id,
+          email: data.user.email,
+          name,
+          role,
+        });
+        toast.success('Conta criada!');
+        onClose?.();
+      } else {
+        toast.success('Verifique seu email para confirmar a conta');
+        setMode('login');
+        resetSignup();
+      }
+    } catch (err) {
+      toast.error(err.message || 'Erro ao criar conta');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+      data-testid="auth-modal"
+    >
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[92vh] overflow-y-auto relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-gray-500"
+          data-testid="auth-modal-close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {mode === 'login' ? (
+          /* ============ LOGIN ============ */
+          <div className="p-8 pt-10">
+            <h2 className="text-2xl font-bold text-center mb-6">Entrar</h2>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                data-testid="login-email"
+              />
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Senha"
+                className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                data-testid="login-password"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-12 bg-gray-900 hover:bg-gray-800 disabled:opacity-60 text-white font-semibold rounded-lg flex items-center justify-center transition-colors"
+                data-testid="login-submit"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Entrar'}
+              </button>
+            </form>
+            <button
+              type="button"
+              onClick={() => setMode('signup')}
+              className="block mx-auto mt-6 text-sm text-gray-600 hover:text-gray-900"
+              data-testid="switch-to-signup"
+            >
+              Não tem conta? <span className="font-semibold">Criar conta</span>
+            </button>
+          </div>
+        ) : (
+          /* ============ SIGNUP ============ */
+          <div className="p-8 pt-6">
+            <button
+              type="button"
+              onClick={() => setMode('login')}
+              className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mb-4"
+              data-testid="signup-back"
+            >
+              <ArrowLeft className="w-4 h-4" /> Voltar
+            </button>
+
+            <h2 className="text-2xl font-bold text-center mb-5">Criar conta</h2>
+
+            {/* role toggle */}
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <button
+                type="button"
+                onClick={() => setRole('migrant')}
+                className={`flex flex-col items-center justify-center py-4 rounded-xl border-2 transition-all ${
+                  role === 'migrant'
+                    ? 'border-pink-400 bg-pink-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
+                data-testid="role-procuro"
+              >
+                <Search className="w-6 h-6 mb-1.5" />
+                <span className="text-sm font-medium">Procuro serviço</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole('helper')}
+                className={`flex flex-col items-center justify-center py-4 rounded-xl border-2 transition-all ${
+                  role === 'helper'
+                    ? 'border-pink-400 bg-pink-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
+                data-testid="role-ofereco"
+              >
+                <Wrench className="w-6 h-6 mb-1.5" />
+                <span className="text-sm font-medium">Ofereço serviço</span>
+              </button>
+            </div>
+
+            {/* avatar uploader */}
+            <div className="flex flex-col items-center mb-5">
+              <p className="text-sm text-gray-700 mb-2">Foto de perfil</p>
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="relative w-24 h-24 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden hover:bg-gray-200 transition-colors"
+                data-testid="avatar-pick"
+              >
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <Camera className="w-8 h-8 text-gray-400" />
+                )}
+                <span className="absolute bottom-0 right-0 w-7 h-7 bg-pink-500 text-white rounded-full flex items-center justify-center shadow">
+                  <Plus className="w-4 h-4" />
+                </span>
+              </button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleAvatarPick}
+              />
+            </div>
+
+            <form onSubmit={handleSignup} className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-700">Nome completo</label>
+                <input
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Seu nome"
+                  className="mt-1 w-full h-11 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
+                  data-testid="signup-name"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-700">Email</label>
+                <input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seu@email.com"
+                  className="mt-1 w-full h-11 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
+                  data-testid="signup-email"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-700">Senha</label>
+                <input
+                  required
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Mínimo 6 caracteres"
+                  className="mt-1 w-full h-11 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
+                  data-testid="signup-password"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-700">Sua localização</label>
+                <input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Ex: São Paulo, SP"
+                  className="mt-1 w-full h-11 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
+                  data-testid="signup-location"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-12 mt-2 bg-pink-500 hover:bg-pink-600 disabled:opacity-60 text-white font-semibold rounded-lg flex items-center justify-center transition-colors"
+                data-testid="signup-submit"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Continuar'}
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
