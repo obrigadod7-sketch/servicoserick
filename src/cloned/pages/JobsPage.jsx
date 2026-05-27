@@ -530,49 +530,44 @@ export default function JobsPage() {
                           <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-gray-500">
                             <span className="flex items-center gap-1">
                               <MapPin size={12} />
-                              {job.location || 'França'}
+                              {job.location || 'Brasil'}
                             </span>
-                            <span className="flex items-center gap-1">
-                              <Clock size={12} />
-                              {getTimeAgo(job.date_posted)}
-                            </span>
-                            {job.employment_type && (
-                              <span className="px-2 py-0.5 bg-gray-100 rounded-full">
-                                {job.employment_type}
+                            {job.posted && (
+                              <span className="flex items-center gap-1">
+                                <Clock size={12} />
+                                {job.posted}
                               </span>
                             )}
-                            {job.source && (
-                              <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">
-                                via {job.source}
+                            {(job.type || job.employment_type) && (
+                              <span className="px-2 py-0.5 bg-gray-100 rounded-full">
+                                {job.type || job.employment_type}
                               </span>
                             )}
                           </div>
-                          
+
                           {/* Salário se disponível */}
-                          {(job.salary_min || job.salary_max) && (
+                          {job.salary && (
                             <div className="mt-2 text-sm font-medium text-green-600">
-                              💰 {job.salary_min && `${job.salary_min.toLocaleString()}`}
-                              {job.salary_min && job.salary_max && ' - '}
-                              {job.salary_max && `${job.salary_max.toLocaleString()}`}
-                              {job.salary_currency && ` ${job.salary_currency}`}
+                              💰 {job.salary}
                             </div>
                           )}
-                          
+
                           {/* Descrição resumida */}
                           {job.description && (
                             <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                              {job.description.replace(/<[^>]*>/g, '').substring(0, 150)}...
+                              {String(job.description).replace(/<[^>]*>/g, '').substring(0, 180)}
                             </p>
                           )}
                         </div>
                       </div>
-                      
+
                       {/* Botão de candidatar */}
                       <div className="mt-3 flex gap-2">
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
-                            window.open(job.url, '_blank');
+                            const target = job.apply_url || job.url;
+                            if (target) window.open(target, '_blank');
                           }}
                           className="flex-1 rounded-xl bg-blue-600 hover:bg-blue-700"
                           size="sm"
