@@ -187,7 +187,7 @@ export default function AuthModal({ open, onClose, mode = 'login', onModeChange 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
-                className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 data-testid="login-email"
               />
               <input
@@ -196,13 +196,13 @@ export default function AuthModal({ open, onClose, mode = 'login', onModeChange 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Senha"
-                className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 data-testid="login-password"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 bg-gray-900 hover:bg-gray-800 disabled:opacity-60 text-white font-semibold rounded-lg flex items-center justify-center transition-colors"
+                className="w-full h-12 bg-primary hover:bg-primary/90 disabled:opacity-60 text-primary-foreground font-semibold rounded-lg flex items-center justify-center transition-colors"
                 data-testid="login-submit"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Entrar'}
