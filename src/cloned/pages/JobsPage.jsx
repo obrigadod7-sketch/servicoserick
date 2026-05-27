@@ -108,18 +108,18 @@ const SERVICE_CATEGORIES = [
   { value: 'other', label: 'Outros', icon: MoreHorizontal, emoji: '➕' }
 ];
 
-// Termos de busca sugeridos por categoria
+// Termos de busca sugeridos por categoria (Brasil - Português)
 const SEARCH_SUGGESTIONS = {
-  'bricolage': ['électricien', 'plombier', 'menuisier', 'peintre'],
-  'cleaning': ['agent d\'entretien', 'femme de ménage', 'nettoyage'],
-  'transport': ['chauffeur', 'livreur', 'déménageur'],
-  'food': ['cuisinier', 'serveur', 'aide cuisine', 'restauration'],
-  'care': ['aide soignant', 'auxiliaire de vie', 'infirmier'],
-  'education': ['professeur', 'formateur', 'animateur'],
-  'tech': ['développeur', 'informaticien', 'technicien'],
-  'childcare': ['nounou', 'baby-sitter', 'auxiliaire puériculture'],
-  'garden': ['jardinier', 'paysagiste', 'espaces verts'],
-  'moving': ['déménageur', 'manutentionnaire', 'logistique']
+  'bricolage': ['eletricista', 'encanador', 'marceneiro', 'pintor'],
+  'cleaning': ['auxiliar de limpeza', 'faxineira', 'diarista'],
+  'transport': ['motorista', 'entregador', 'motoboy'],
+  'food': ['cozinheiro', 'garçom', 'auxiliar de cozinha', 'atendente'],
+  'care': ['cuidador de idosos', 'técnico de enfermagem', 'enfermeiro'],
+  'education': ['professor', 'instrutor', 'monitor'],
+  'tech': ['desenvolvedor', 'analista de sistemas', 'técnico de TI'],
+  'childcare': ['babá', 'auxiliar de creche', 'pajem'],
+  'garden': ['jardineiro', 'paisagista'],
+  'moving': ['ajudante de mudança', 'carregador', 'logística']
 };
 
 export default function JobsPage() {
