@@ -382,22 +382,6 @@ export default function MessagesPage() {
                 </div>
               </div>
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-                {messages.length === 0 ? (
-                  <p className="text-center text-gray-400 text-sm mt-8">Nenhuma mensagem ainda. Diga olá!</p>
-                ) : (
-                  messages.map((m, idx) => {
-                    const fromMe = m.is_from_me || m.from_user_id === user?.id;
-                    return (
-                      <div key={m.id || idx} className={`flex ${fromMe ? 'justify-end' : 'justify-start'}`}>
-                        <div
-                          className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm ${
-                            fromMe
-                              ? 'bg-green-500 text-white rounded-tr-md'
-                              : 'bg-white border border-gray-200 text-gray-900 rounded-tl-md shadow-sm'
-                          }`}
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gradient-to-b from-green-50/40 to-white">
                 {messages.length === 0 ? (
                   <p className="text-center text-gray-400 text-sm mt-8">Nenhuma mensagem ainda. Diga olá!</p>
