@@ -261,16 +261,6 @@ export default function MessagesPage() {
               />
             </div>
           </div>
-                {t.count > 0 && (
-                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${
-                    filter === t.id ? 'bg-white/20' : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    {t.count}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
 
           <div className="flex-1 overflow-y-auto px-2">
             {filtered.length === 0 ? (
