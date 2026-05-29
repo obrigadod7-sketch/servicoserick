@@ -23,6 +23,43 @@ export default function AIChat() {
     scrollToBottom();
   }, [messages]);
 
+  // Carrega lista de vozes (algumas plataformas precisam disparar este evento)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    const load = () => window.speechSynthesis.getVoices();
+    load();
+    window.speechSynthesis.onvoiceschanged = load;
+    return () => { window.speechSynthesis.onvoiceschanged = null; };
+  }, []);
+
+  const pickFemaleVoice = () => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return null;
+    const voices = window.speechSynthesis.getVoices();
+    const isFemale = (v) => /female|mulher|feminin|woman|girl|luciana|maria|joana|fernanda|francisca|samantha|victoria|zira|google português( do brasil)?/i.test(`${v.name} ${v.voiceURI || ''}`);
+    return (
+      voices.find((v) => v.lang?.toLowerCase().startsWith('pt') && isFemale(v)) ||
+      voices.find((v) => v.lang?.toLowerCase().startsWith('pt')) ||
+      voices.find(isFemale) ||
+      voices[0] || null
+    );
+  };
+
+  const speak = (text) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis || !text) return;
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'pt-BR';
+      u.rate = 1;
+      u.pitch = 1.15; // levemente mais agudo para reforçar voz feminina
+      const v = pickFemaleVoice();
+      if (v) u.voice = v;
+      window.speechSynthesis.speak(u);
+    } catch (e) {
+      console.warn('TTS falhou', e);
+    }
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
