@@ -3,7 +3,7 @@ import { AuthContext } from '../ClonedAuthContext';
 import { Button } from '../components/ui/button';
 import { Textarea } from '../components/ui/textarea';
 import BottomNav from '../components/BottomNav';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Volume2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
