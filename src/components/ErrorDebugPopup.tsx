@@ -29,9 +29,9 @@ type AttachedFile = {
   blob: Blob;
 };
 
-const MAX_IMAGE_BYTES = 20_000_000; // 20MB por imagem (será comprimida se > TARGET)
-const MAX_TOTAL_BYTES = 60_000_000; // 60MB total bruto antes de compressão
-const TARGET_IMAGE_BYTES = 2_500_000; // alvo após compressão: ~2.5MB
+const MAX_IMAGE_BYTES = 100_000_000; // 100MB por arquivo
+const MAX_TOTAL_BYTES = 500_000_000; // 500MB total
+const TARGET_IMAGE_BYTES = 2_500_000; // alvo após compressão de imagens: ~2.5MB
 const MAX_DIMENSION = 2048; // redimensiona lado maior para no máx 2048px
 
 const fileToDataUrl = (file: Blob): Promise<string> =>
