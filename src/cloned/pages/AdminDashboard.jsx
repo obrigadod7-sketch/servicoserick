@@ -301,7 +301,7 @@ function Card({ icon: Icon, label, value, color }) {
   );
 }
 
-function PostRow({ p, onDelete }) {
+function PostRow({ p, onDelete, deleting }) {
   return (
     <div className="p-4 flex items-start gap-3">
       {p.photos?.[0] && <img src={p.photos[0]} alt="" className="w-14 h-14 rounded-lg object-cover" />}
@@ -310,8 +310,8 @@ function PostRow({ p, onDelete }) {
         <p className="text-xs text-gray-500 truncate">{p._profile?.display_name || 'usuário'} · {p.category_slug || 'sem categoria'} · {new Date(p.created_at).toLocaleDateString('pt-BR')}</p>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">{p.description}</p>
       </div>
-      <Button size="sm" variant="outline" onClick={() => onDelete(p.id)}>
-        <Trash2 className="w-4 h-4 text-red-600" />
+      <Button size="sm" variant="outline" disabled={deleting} onClick={() => onDelete(p.id)}>
+        {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4 text-red-600" />}
       </Button>
     </div>
   );
