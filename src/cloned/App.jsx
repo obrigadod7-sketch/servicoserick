@@ -23,6 +23,7 @@ import MapPage from './pages/MapPage';
 import JobsPage from './pages/JobsPage';
 import HousingPage from './pages/HousingPage';
 import SubscriptionPage from './pages/SubscriptionPage';
+import PublishFab from './components/PublishFab';
 
 export const AuthContext = React.createContext();
 
@@ -109,6 +110,7 @@ function App() {
           <Route path="/volunteer-register" element={<VolunteerRegisterPage />} />
           <Route path="/assinatura" element={user ? <SubscriptionPage /> : <Navigate to="/" />} />
         </Routes>
+        {user && <PublishFab />}
       </BrowserRouter>
     </AuthContext.Provider>
   );
