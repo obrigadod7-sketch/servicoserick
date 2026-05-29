@@ -1,6 +1,42 @@
 import React from 'react';
-import { Check, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Check, X, Home, Users, Plus, CreditCard, MessageCircle, TrendingUp } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+function TopNav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const items = [
+    { icon: Home, label: 'Início', path: '/home' },
+    { icon: Users, label: 'Ofertantes', path: '/ofertantes' },
+    { icon: Plus, label: 'Publicar', path: '/home?openSOS=1', center: true },
+    { icon: TrendingUp, label: 'Assinatura', path: '/oferecer-servicos' },
+    { icon: MessageCircle, label: 'Mensagens', path: '/chat' },
+  ];
+  return (
+    <div className="hidden md:flex items-center justify-center gap-10 bg-white border-b border-gray-200 px-6 py-3">
+      {items.map((it) => {
+        const Icon = it.icon;
+        const active = location.pathname === it.path.split('?')[0];
+        if (it.center) {
+          return (
+            <button key={it.label} onClick={() => navigate(it.path)} className="flex flex-col items-center gap-1">
+              <div className="w-11 h-11 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center shadow-md transition">
+                <Plus className="w-6 h-6 text-white" strokeWidth={2.5} />
+              </div>
+              <span className="text-xs text-gray-700 font-medium">{it.label}</span>
+            </button>
+          );
+        }
+        return (
+          <button key={it.label} onClick={() => navigate(it.path)} className="flex flex-col items-center gap-1 min-w-[70px]">
+            <Icon className={`w-6 h-6 ${active ? 'text-green-600' : 'text-gray-500'}`} strokeWidth={active ? 2.5 : 2} />
+            <span className={`text-xs ${active ? 'text-green-600 font-semibold' : 'text-gray-700'}`}>{it.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 const Yes = () => <Check className="w-5 h-5 text-green-600 mx-auto" strokeWidth={3} />;
 const No = () => <X className="w-5 h-5 text-red-500 mx-auto" strokeWidth={3} />;
@@ -42,7 +78,9 @@ export default function OfferServicesPage() {
 
   return (
     <div className="min-h-screen bg-white pb-24">
+      <TopNav />
       <div className="max-w-5xl mx-auto px-4 pt-10">
+
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900">Assinatura</h1>
           <p className="text-gray-600 mt-2">Compare os planos disponíveis</p>
