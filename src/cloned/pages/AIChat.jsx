@@ -89,20 +89,15 @@ export default function AIChat() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL || import.meta.env.VITE_BACKEND_URL || ""}/api/ai/chat`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          message: input,
-          language: i18n.language 
-        })
+      const history = [...messages, userMessage].map((m) => ({
+        role: m.role === 'ai' ? 'assistant' : m.role,
+        content: m.content,
+      }));
+      const { data, error } = await supabase.functions.invoke('ai-assistant', {
+        body: { messages: history },
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (!error && data?.response) {
         setMessages(prev => [...prev, { role: 'ai', content: data.response }]);
         if (utterance && window.speechSynthesis) {
           utterance.text = data.response || '';
