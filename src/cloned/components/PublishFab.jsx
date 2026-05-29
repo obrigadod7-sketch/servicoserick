@@ -11,8 +11,9 @@ export default function PublishFab({ className = '' }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Não mostrar na home/feed (já tem botão na nav central)
-  if (location.pathname === '/home' || location.pathname === '/') return null;
+  // Ocultar apenas em rotas de autenticação/landing
+  const hiddenRoutes = ['/', '/auth', '/servicos', '/servicos/auth'];
+  if (hiddenRoutes.includes(location.pathname)) return null;
 
   return (
     <button

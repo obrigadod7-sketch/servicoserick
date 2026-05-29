@@ -24,6 +24,7 @@ import JobsPage from './pages/JobsPage';
 import HousingPage from './pages/HousingPage';
 import SubscriptionPage from './pages/SubscriptionPage';
 import PublishFab from './components/PublishFab';
+import BoasPraticasPage from './pages/BoasPraticasPage';
 
 export const AuthContext = React.createContext();
 
@@ -109,6 +110,7 @@ function App() {
           <Route path="/map" element={user ? <MapPage /> : <Navigate to="/" />} />
           <Route path="/volunteer-register" element={<VolunteerRegisterPage />} />
           <Route path="/assinatura" element={user ? <SubscriptionPage /> : <Navigate to="/" />} />
+          <Route path="/boas-praticas" element={<BoasPraticasPage />} />
         </Routes>
         {user && <PublishFab />}
       </BrowserRouter>
