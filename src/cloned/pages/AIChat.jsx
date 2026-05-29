@@ -63,6 +63,24 @@ export default function AIChat() {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
+    // Cria utterance ainda no contexto do gesto do usuário (necessário no iOS/Safari)
+    let utterance = null;
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      try {
+        window.speechSynthesis.cancel();
+        // "Destrava" o motor de voz com fala vazia silenciosa
+        const unlock = new SpeechSynthesisUtterance(' ');
+        unlock.volume = 0;
+        window.speechSynthesis.speak(unlock);
+        utterance = new SpeechSynthesisUtterance('');
+        utterance.lang = 'pt-BR';
+        utterance.rate = 1;
+        utterance.pitch = 1.15;
+        const v = pickFemaleVoice();
+        if (v) utterance.voice = v;
+      } catch (_) { /* ignore */ }
+    }
+
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
@@ -84,7 +102,12 @@ export default function AIChat() {
       if (response.ok) {
         const data = await response.json();
         setMessages(prev => [...prev, { role: 'ai', content: data.response }]);
-        speak(data.response);
+        if (utterance && window.speechSynthesis) {
+          utterance.text = data.response || '';
+          try { window.speechSynthesis.speak(utterance); } catch (_) { speak(data.response); }
+        } else {
+          speak(data.response);
+        }
       } else {
         toast.error('Erro ao enviar mensagem');
       }

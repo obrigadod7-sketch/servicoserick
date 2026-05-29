@@ -270,12 +270,12 @@ export default function ProfileStories({ avatarSrc, userName = 'Você' }) {
             </div>
           </div>
 
-          {/* Mídia */}
-          <div className="flex-1 flex items-center justify-center px-2">
+          {/* Mídia em tela cheia */}
+          <div className="flex-1 w-full flex items-center justify-center bg-black overflow-hidden">
             {viewing.type === 'video' ? (
-              <video src={viewing.src} autoPlay controls className="max-h-full max-w-full" />
+              <video src={viewing.src} autoPlay controls className="w-full h-full object-contain" />
             ) : (
-              <img src={viewing.src} alt="" className="max-h-full max-w-full" />
+              <img src={viewing.src} alt="" className="w-full h-full object-contain" />
             )}
           </div>
 
