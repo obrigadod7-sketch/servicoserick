@@ -366,7 +366,7 @@ export default function ProfilePage() {
             className="relative h-40 sm:h-52 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-400 bg-cover bg-center group"
             style={coverSrc ? { backgroundImage: `url(${coverSrc})` } : undefined}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowCoverDialog(true)}
@@ -376,6 +376,12 @@ export default function ProfilePage() {
               <Camera size={14} />
               {coverSrc ? 'Trocar capa' : 'Adicionar capa'}
             </button>
+            {/* Nome sobreposto na capa — sempre visível */}
+            <div className="absolute left-4 sm:left-6 bottom-3 right-20 z-10 pointer-events-none">
+              <h1 className="text-white font-heading font-bold text-xl sm:text-2xl drop-shadow-lg truncate" data-testid="cover-user-name">
+                {user?.use_display_name && user?.display_name ? user.display_name : (user?.name || user?.display_name || 'Seu nome')}
+              </h1>
+            </div>
           </div>
 
           <Dialog open={showCoverDialog} onOpenChange={setShowCoverDialog}>
