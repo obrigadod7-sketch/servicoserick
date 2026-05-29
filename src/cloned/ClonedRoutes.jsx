@@ -170,5 +170,6 @@ export function clonedRoutes(user) {
     <Route key="cloned-servicos-assinatura" path="/servicos/assinatura" element={<SubscriptionPage />} />,
     <Route key="cloned-ofereco-ajuda" path="/ofereco-ajuda" element={<OferecoAjudaPage />} />,
     <Route key="cloned-sou-voluntario" path="/sou-voluntario" element={<SouVoluntarioPage />} />,
+    <Route key="cloned-boas-praticas" path="/boas-praticas" element={<BoasPraticasPage />} />,
   ];
 }
