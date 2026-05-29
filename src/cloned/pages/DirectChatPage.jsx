@@ -233,11 +233,15 @@ export default function DirectChatPage() {
       const d = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
       if (Number.isNaN(d.getTime())) throw new Error('Data ou hora inválida');
       const formatted = d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-      const msg = `📅 Agendamento proposto: ${formatted}${scheduleNote ? `\n📝 ${scheduleNote}` : ''}`;
+      const modeLabel = scheduleMode === 'call' ? '📞 Chamada de voz/vídeo'
+        : scheduleMode === 'request_address' ? '📍 No endereço da solicitação'
+        : `📍 Outro endereço: ${scheduleAddress || '(a confirmar)'}`;
+      const endPart = scheduleEndTime ? ` até ${scheduleEndTime}` : '';
+      const msg = `📅 Agendamento proposto: ${formatted}${endPart}\n${modeLabel}${scheduleNote ? `\n📝 ${scheduleNote}` : ''}`;
       await sendSystemMessage(msg);
       toast.success('Agendamento enviado!');
       setActiveModal(null);
-      setScheduleDate(''); setScheduleTime(''); setScheduleNote('');
+      setScheduleDate(''); setScheduleTime(''); setScheduleEndTime(''); setScheduleNote(''); setScheduleAddress(''); setScheduleMode('call');
     } catch (error) {
       console.error('[chat] erro ao agendar:', error);
       toast.error(error?.message || 'Erro ao agendar');
