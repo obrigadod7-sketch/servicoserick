@@ -327,8 +327,14 @@ export default function ProfileStories({ avatarSrc, userName = 'Você' }) {
               Encerrar
             </button>
           </div>
-          <div className="flex-1 flex items-center justify-center">
-            <video ref={liveVideoRef} autoPlay muted playsInline className="max-h-full max-w-full" />
+          <div className="flex-1 w-full flex items-center justify-center bg-black overflow-hidden">
+            <video
+              ref={liveVideoRef}
+              autoPlay
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="flex items-center justify-center gap-4 p-6">
             <button onClick={toggleMic} className="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center">
