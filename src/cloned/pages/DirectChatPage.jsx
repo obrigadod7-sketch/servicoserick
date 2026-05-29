@@ -708,7 +708,7 @@ export default function DirectChatPage() {
                 {Object.entries(messageGroups).map(([date, msgs]) => (
                   <div key={date}>
                     <div className="flex items-center justify-center my-4">
-                      <span className="bg-gray-100 text-gray-500 text-[11px] px-3 py-1 rounded-full">
+                      <span className="text-[#0a2540] text-xs font-medium">
                         {date === new Date().toLocaleDateString('pt-BR') ? 'Hoje' : date}
                       </span>
                     </div>
