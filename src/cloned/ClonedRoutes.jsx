@@ -26,6 +26,7 @@ import PublicProfilePage from './pages/PublicProfilePage';
 import CallPage from './pages/CallPage';
 import OferecoAjudaPage from './pages/OferecoAjudaPage';
 import SouVoluntarioPage from './pages/SouVoluntarioPage';
+import BoasPraticasPage from './pages/BoasPraticasPage';
 import { AuthContext } from './ClonedAuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { getOrCreateSvcProfile, normalizeAuthUser } from './lib/authProfile';
