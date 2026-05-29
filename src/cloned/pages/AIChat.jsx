@@ -153,6 +153,16 @@ export default function AIChat() {
                 msg.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'
               }`}>
                 <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                {msg.role === 'ai' && (
+                  <button
+                    type="button"
+                    onClick={() => speak(msg.content)}
+                    className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                    aria-label="Ouvir resposta"
+                  >
+                    <Volume2 size={14} /> Ouvir
+                  </button>
+                )}
               </div>
               {msg.role === 'user' && (
                 <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-1">
