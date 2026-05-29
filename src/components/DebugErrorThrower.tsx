@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 /**
  * DebugErrorThrower
@@ -12,21 +12,15 @@ import { useEffect, useState } from "react";
  * tratamento — o throw síncrono no render é o que aciona o overlay nativo.
  */
 export const DebugErrorThrower = () => {
-  const [message, setMessage] = useState<string | null>(null);
-
   useEffect(() => {
     const handler = (e: Event) => {
       const detail = (e as CustomEvent<string>).detail;
       if (typeof detail !== "string" || detail.length === 0) return;
-      setMessage(detail);
+      console.info("lovable-debug-error", detail);
     };
     window.addEventListener("lovable-debug-error", handler as EventListener);
     return () => window.removeEventListener("lovable-debug-error", handler as EventListener);
   }, []);
-
-  if (message) {
-    throw new Error(message);
-  }
 
   return null;
 };
