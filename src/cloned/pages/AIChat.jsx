@@ -84,6 +84,7 @@ export default function AIChat() {
       if (response.ok) {
         const data = await response.json();
         setMessages(prev => [...prev, { role: 'ai', content: data.response }]);
+        speak(data.response);
       } else {
         toast.error('Erro ao enviar mensagem');
       }
